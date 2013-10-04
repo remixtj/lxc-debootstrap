@@ -87,7 +87,7 @@ check_var() {
 }
 
 make_hwaddr() {
-	IP=$1
+	IP=${1%/*}
 	printf "02:00:%x:%x:%x:%x" ${IP//./ }
 	return 0
 }
