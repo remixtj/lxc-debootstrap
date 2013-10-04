@@ -105,7 +105,7 @@ DNS_RESOLVER="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
-USE_LVM = 0
+USE_LVM=0
 
 # Load global configuration file
 if [ -r "/etc/lxc-debootstrap/config" ]; then
