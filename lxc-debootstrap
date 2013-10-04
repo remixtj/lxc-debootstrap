@@ -248,6 +248,7 @@ if [ "${DEBIAN_MIRROR/ubuntu}" != "$DEBIAN_MIRROR" ]; then
 	rm "$lxc_rootfs/etc/init/tty6.conf"
 else
 	sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
+fi
 
 echo "remove pointless services in a container"
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountfs remove >/dev/null
@@ -322,6 +323,7 @@ lxc.cap.drop                            = sys_pacct
 lxc.cap.drop                            = sys_rawio
 lxc.cap.drop                            = sys_resource
 lxc.cap.drop                            = sys_time
+
 EOT
 
 echo "starting container with lxc-start"
