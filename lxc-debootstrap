@@ -238,7 +238,16 @@ else
 fi
 
 echo "disabling useless tty"
-sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
+
+if [ "${DEBIAN_MIRROR/ubuntu}" != "$DEBIAN_MIRROR" ]; then
+	rm "$lxc_rootfs/etc/init/tty1.conf"
+	rm "$lxc_rootfs/etc/init/tty2.conf"
+	rm "$lxc_rootfs/etc/init/tty3.conf"
+	rm "$lxc_rootfs/etc/init/tty4.conf"
+	rm "$lxc_rootfs/etc/init/tty5.conf"
+	rm "$lxc_rootfs/etc/init/tty6.conf"
+else
+	sed -i 's/^[1-6]:/#&/' "$lxc_rootfs/etc/inittab"
 
 echo "remove pointless services in a container"
 chroot $lxc_rootfs /usr/sbin/update-rc.d -f umountfs remove >/dev/null
