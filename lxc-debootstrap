@@ -105,6 +105,7 @@ DNS_RESOLVER="10.42.0.254"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
+USE_LVM = 0
 
 # Load global configuration file
 if [ -r "/etc/lxc-debootstrap/config" ]; then
@@ -114,6 +115,8 @@ fi
 # Load container configuration file
 if [ -r "/etc/lxc-debootstrap/containers/$lxc_name" ]; then
 	. "/etc/lxc-debootstrap/containers/$lxc_name"
+elif [ -r "./$lxc_name" ]; then
+	. "./$lxc_name"
 fi
 
 get_lvm_volpath() {
@@ -140,6 +143,7 @@ debian_mirror=$(check_var "$DEBIAN_MIRROR")
 debian_suite=$(check_var "$DEBIAN_SUITE")
 debian_arch=$(check_var "$DEBIAN_ARCH")
 debootstrap_cache_dir=$(check_var "$CACHE_ROOT/$DEBIAN_SUITE.$DEBIAN_ARCH")
+use_lvm=$(check_var $USE_LVM)
 
 # Print summary
 echo
@@ -168,20 +172,22 @@ echo
 
 cache_init
 
-echo "creating logical volume $lvm_volpath"
-lvcreate -L $lvm_disksize -n $lxc_name $lxc_vg_name >/dev/null
+if [ $use_lvm = 1 ]; then
+	echo "creating logical volume $lvm_volpath"
+	lvcreate -L $lvm_disksize -n $lxc_name $lxc_vg_name >/dev/null
 
-echo "creating filesystem on $lvm_volpath"
-mkfs.$FSTYPE -q $lvm_volpath
+	echo "creating filesystem on $lvm_volpath"
+	mkfs.$FSTYPE -q $lvm_volpath
 
-echo "creating root directory $lxc_rootpath"
-mkdir $lxc_rootpath
+	echo "creating root directory $lxc_rootpath"
+	mkdir $lxc_rootpath
 
-echo "adding entry in /etc/fstab"
-echo "$lvm_volpath $lxc_rootpath ext4 defaults 0 2" >>/etc/fstab
+	echo "adding entry in /etc/fstab"
+	echo "$lvm_volpath $lxc_rootpath ext4 defaults 0 2" >>/etc/fstab
 
-echo "mount $lvm_volpath on $lxc_rootpath using fstab"
-mount $lxc_rootpath
+	echo "mount $lvm_volpath on $lxc_rootpath using fstab"
+	mount $lxc_rootpath
+fi
 
 echo "populating $lxc_rootfs"
 cp -pR $debootstrap_cache_dir/ $lxc_rootfs
