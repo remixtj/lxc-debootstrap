@@ -59,8 +59,7 @@ cache_init() {
 	deb_out=$(mktemp "/tmp/debootstrap.XXXXXX")
 	echo "cache dir does not exists"
 	echo "running debootstrap (please wait, output in $deb_out)"
-	
-	if [[ $DEBIAN_MIRROR == "*ubuntu*" ]]; then
+	if [ ${DEBIAN_MIRROR/ubuntu} == "$DEBIAN_MIRROR" ]; then
 		pkgs="openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
 	else
 		pkgs="libterm-readline-perl-perl,openssh-server,net-tools,netbase,iputils-ping,dnsutils,ifupdown,apt-utils"
@@ -297,6 +296,28 @@ lxc.cgroup.devices.allow = c 136:* rwm
 lxc.cgroup.devices.allow = c 5:2 rwm
 # rtc
 lxc.cgroup.devices.allow = c 254:0 rwm
+
+# drop not needed capabilities
+## Capabilities
+lxc.cap.drop                            = audit_control
+lxc.cap.drop                            = audit_write
+lxc.cap.drop                            = mac_admin
+lxc.cap.drop                            = mac_override
+lxc.cap.drop                            = mknod
+lxc.cap.drop                            = setfcap
+lxc.cap.drop                            = setpcap
+lxc.cap.drop                            = sys_admin
+lxc.cap.drop                            = sys_boot
+#lxc.cap.drop                            = sys_chroot # required by SSH
+lxc.cap.drop                            = sys_module
+#lxc.cap.drop                            = sys_nice
+lxc.cap.drop                            = sys_pacct
+lxc.cap.drop                            = sys_rawio
+lxc.cap.drop                            = sys_resource
+lxc.cap.drop                            = sys_time
+#lxc.cap.drop                            = sys_tty_config # required by getty
+
+
 EOT
 
 echo "starting container with lxc-start"
