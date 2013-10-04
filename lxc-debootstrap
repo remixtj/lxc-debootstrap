@@ -217,14 +217,14 @@ echo "networking : setting DNS resolver $net_resolver"
 echo "nameserver $net_dns_resolver" >"$lxc_rootfs/etc/resolv.conf"
 [ "$net_domain" ] && echo "search $net_domain" >>"$lxc_rootfs/etc/resolv.conf"
 
-echo "networking : setting IP configuration"
-cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
-auto eth0
-iface eth0 inet static
-    address $net_ipaddr
-    netmask $net_mask
-    gateway $net_gateway
-EOT
+#echo "networking : setting IP configuration"
+#cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
+#auto eth0
+#iface eth0 inet static
+#    address $net_ipaddr
+#    netmask $net_mask
+#    gateway $net_gateway
+#EOT
 
 echo "networking : creating hosts file"
 host_file="$lxc_rootfs/etc/hosts"
@@ -282,6 +282,8 @@ lxc.network.flags = up
 lxc.network.link = $net_bridge_if
 lxc.network.name = eth0
 lxc.network.hwaddr = $net_hwaddr
+lxc.network.ipv4 = $net_ipaddr
+lxc.netowrk.gateway = $net_gateway
 lxc.pts = 1024
 #lxc.console =
 lxc.tty = 4
