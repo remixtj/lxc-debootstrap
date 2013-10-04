@@ -80,6 +80,12 @@ check_var() {
 	return 0
 }
 
+make_hwaddr() {
+	IP=$1
+	printf "02:00:%x:%x:%x:%x" ${IP//./ }
+	return 0
+}
+
 
 ###############################################################################
 # Main
@@ -124,6 +130,10 @@ get_lvm_volpath() {
 	vol_name=$(echo $vol_name | sed 's/-/--/g')
 	echo "/dev/mapper/$LXC_VG_NAME-$vol_name"
 }
+
+if [ -z "$HWADDR"]; then
+	HWADDR=$(make_hwaddr $IPADDR)
+fi
 
 net_ipaddr=$(check_var "$IPADDR")
 net_mask=$(check_var "$NETMASK")
