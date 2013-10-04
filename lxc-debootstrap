@@ -262,6 +262,7 @@ chroot $lxc_rootfs passwd -l root >/dev/null
 
 echo "adding SSH keys"
 mkdir -p -m 700 "$lxc_rootfs/root/.ssh/"
+[ ! -f "$ssh_pubfile" ] && ssh-keygen 
 [ -f "$ssh_pubfile" ] && cp "$ssh_pubfile" "$lxc_rootfs/root/.ssh/authorized_keys"
 
 echo "setting APT configuration"
