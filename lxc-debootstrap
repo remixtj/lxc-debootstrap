@@ -317,16 +317,11 @@ lxc.cap.drop                            = setfcap
 lxc.cap.drop                            = setpcap
 lxc.cap.drop                            = sys_admin
 lxc.cap.drop                            = sys_boot
-#lxc.cap.drop                            = sys_chroot # required by SSH
 lxc.cap.drop                            = sys_module
-#lxc.cap.drop                            = sys_nice
 lxc.cap.drop                            = sys_pacct
 lxc.cap.drop                            = sys_rawio
 lxc.cap.drop                            = sys_resource
 lxc.cap.drop                            = sys_time
-#lxc.cap.drop                            = sys_tty_config # required by getty
-
-
 EOT
 
 echo "starting container with lxc-start"
