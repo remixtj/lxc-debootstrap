@@ -162,7 +162,7 @@ echo "--------------------"
 show_var lxc_name
 show_var debian_suite
 show_var debian_arch
-if [ $use_lvm == 0]; then
+if [ $use_lvm == 0 ]; then
 	show_var lvm_disksize	
 	show_var lvm_volpath
 fi
