@@ -142,10 +142,10 @@ net_gateway=$(check_var "$GATEWAY")
 net_dns_resolver=$(check_var "$DNS_RESOLVER")
 net_bridge_if=$(check_var "$BRIDGE_IF")
 net_domain=$(check_var "$DOMAIN")
-lxc_vg_name=$(check_var "$LXC_VG_NAME")
 lxc_rootpath=$(check_var "$LXC_PATH/$lxc_name")
 lxc_rootfs=$(check_var "$lxc_rootpath/rootfs")
 lxc_config=$(check_var "$lxc_rootpath/config")
+lxc_vg_name=$(check_var "$LXC_VG_NAME")
 lvm_disksize=$(check_var "$DISKSIZE")
 lvm_volpath=$(get_lvm_volpath $lxc_name)
 ssh_pubfile=$(check_var "$SSH_PUBFILE")
@@ -162,8 +162,10 @@ echo "--------------------"
 show_var lxc_name
 show_var debian_suite
 show_var debian_arch
-show_var lvm_disksize
-show_var lvm_volpath
+if [ $use_lvm == 0]; then
+	show_var lvm_disksize	
+	show_var lvm_volpath
+fi
 show_var net_domain
 show_var net_ipaddr
 show_var net_gateway
