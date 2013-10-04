@@ -182,15 +182,15 @@ echo
 
 cache_init
 
+echo "creating root directory $lxc_rootpath"
+mkdir $lxc_rootpath
+
 if [ $use_lvm = 1 ]; then
 	echo "creating logical volume $lvm_volpath"
 	lvcreate -L $lvm_disksize -n $lxc_name $lxc_vg_name >/dev/null
 
 	echo "creating filesystem on $lvm_volpath"
 	mkfs.$FSTYPE -q $lvm_volpath
-
-	echo "creating root directory $lxc_rootpath"
-	mkdir $lxc_rootpath
 
 	echo "adding entry in /etc/fstab"
 	echo "$lvm_volpath $lxc_rootpath ext4 defaults 0 2" >>/etc/fstab
