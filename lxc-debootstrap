@@ -1,9 +1,13 @@
 #!/bin/sh
 
 # lxc-debootstrap
-# Description : Simple tool to create Debian LXC guests
+# Description : Simple tool to create Debian/Ubuntu LXC guests
+# URL : https://github.com/tmartinfr/lxc-debootstrap
+# Copyright 2013 Luca Lorenzetto <lorenzetto.luca@gmail.com>
+# Based On lxc-debootstrap from Thomas Martin
 # URL : https://github.com/tmartinfr/lxc-debootstrap
 # Copyright 2013 Thomas Martin <thomas@oopss.org>
+
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,6 +38,8 @@ Create LXC container.
 
 Example :
 $0 example1
+
+Where example1 can be a filename of a configuration file with the syntax defined in README.rst
 EOT
 }
 
@@ -113,7 +119,7 @@ DEBIAN_ARCH=$(dpkg --print-architecture)
 NETMASK="255.255.255.0"
 GATEWAY="10.42.0.254"
 BRIDGE_IF="lxcbr0"
-DNS_RESOLVER="10.42.0.254"
+DNS_RESOLVER="8.8.8.8"
 SSH_PUBFILE="/root/.ssh/id_rsa.pub"
 CACHE_ROOT="/var/cache/lxc-debootstrap"
 FSTYPE="ext4"
@@ -217,14 +223,6 @@ echo "networking : setting DNS resolver $net_resolver"
 echo "nameserver $net_dns_resolver" >"$lxc_rootfs/etc/resolv.conf"
 [ "$net_domain" ] && echo "search $net_domain" >>"$lxc_rootfs/etc/resolv.conf"
 
-#echo "networking : setting IP configuration"
-#cat <<EOT >"$lxc_rootfs/etc/network/interfaces"
-#auto eth0
-#iface eth0 inet static
-#    address $net_ipaddr
-#    netmask $net_mask
-#    gateway $net_gateway
-#EOT
 
 echo "networking : creating hosts file"
 host_file="$lxc_rootfs/etc/hosts"

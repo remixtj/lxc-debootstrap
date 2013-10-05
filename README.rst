@@ -145,6 +145,8 @@ Configuration
 
 Main configuration file is ``/etc/lxc-deboostrap/config``. Per-container
 configuration files are ``/etc/lxc-deboostrap/containers/CONTAINER_NAME``.
+Configuration can be also in current directory where you execute the ``lxc-debootstrap`` command.
+Global one overrides local one, to avoid conflicts on same name.
 
 They overwrite default values (see table below).
 
@@ -156,16 +158,17 @@ Each container MUST have these variables defined :
 
 - ``DISKSIZE``
 - ``IPADDR``
-- ``HWADDR``
+- ``USE_LVM``
 
 Here is a description of all configuration variables :
 
 ============= =================================================================
 Variable      Description
 ============= =================================================================
+**IPADDR**    Container's IP address with subnet size (e.g. ``10.42.0.1/24``)
+**USE_LVM**   Use LVM for containing the rootfs
 **DISKSIZE**  Container's disk size (e.g. ``5G`` or ``1T``)
-**IPADDR**    Container's IP address (e.g. ``10.42.0.1``)
-**HWADDR**    Container's MAC address (e.g. ``42:00:00:00:00:29``)
+HWADDR    Container's MAC address (e.g. ``42:00:00:00:00:29``)
 LXC_VG_NAME   LVM volume group where container's logical volume are allocated
 LXC_PATH      LXC root path where container's mount point are created
 DEBIAN_MIRROR Debian mirror URL
@@ -186,9 +189,10 @@ And their default values :
 ============= =================================================================
 Variable      Default value
 ============= =================================================================
-**DISKSIZE**  Mandatory, no default value
 **IPADDR**    Mandatory, no default value
-**HWADDR**    Mandatory, no default value
+**USE_LVM**   Mandatory, values are 0 or 1
+**DISKSIZE**  Mandatory if USE_LVM is set, no default value
+HWADDR        Computed starting from IP address
 LXC_VG_NAME   ``lxc``
 LXC_PATH      ``/var/lib/lxc``
 DEBIAN_MIRROR ``http://ftp.debian.org/debian/``
@@ -197,7 +201,7 @@ DEBIAN_ARCH   Same as host (e.g. ``amd64`` or ``i386``)
 DOMAIN        None
 NETMASK       ``255.255.255.0``
 GATEWAY       ``10.42.0.254``
-BRIDGE_IF     ``br0``
+BRIDGE_IF     ``lxcbr0``
 DNS_RESOLVER  ``10.42.0.254``
 SSH_PUBFILE   ``/root/.ssh/id_rsa.pub``
 CACHE_ROOT    ``/var/cache/lxc-debootstrap``
@@ -225,10 +229,15 @@ TODO
 - Source post-hook scripts in /etc/lxc-debootstrap/post.d/
 - Auto-detect values of NETMASK, GATEWAY, DNS using bridge configuration
 
-Author
+Original Author
 ------
 
 Copyright 2013 Thomas Martin thomas@oopss.org
+
+Author
+------
+
+Copyright 2013 Luca Lorenzetto lorenzetto.luca@gmail.com
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
